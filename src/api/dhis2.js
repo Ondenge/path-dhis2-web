@@ -133,7 +133,7 @@ export async function fetchTEIs(token, { programId, orgUnitId, page = 1, pageSiz
     fields: 'trackedEntityInstance,trackedEntityType,orgUnit,orgUnitName,inactive,created,lastUpdated,attributes[attribute,value],enrollments[enrollment,program,status,enrollmentDate,events[event,programStage,eventDate,status,dataValues[dataElement,value]]]',
     page,
     pageSize,
-    order: 'lastUpdated:desc',
+    order: 'created:desc',
     totalPages: 'true',
   });
   if (orgUnitId) params.set('ou', orgUnitId);
@@ -178,7 +178,7 @@ export async function fetchEvents(token, { programId, orgUnitId, page = 1, pageS
     fields: 'event,orgUnit,orgUnitName,eventDate,status,storedBy,lastUpdated,dataValues[dataElement,value]',
     pageSize,
     page,
-    order: 'lastUpdated:desc',
+    order: 'created:desc',
     totalPages: 'true',
   });
   if (orgUnitId) {
