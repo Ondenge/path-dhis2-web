@@ -22,7 +22,6 @@ import {
 } from '../hooks/usePrograms';
 import DynamicField from '../components/DynamicField';
 import { getTrackerAttributes, getStageDataElements, today, fmtDate, getDisplayValue } from '../utils/programHelpers';
-import * as api from '../api/dhis2';
 
 // TEI CREATE / EDIT FORM
 function TEIForm({ program, orgUnit, editTEI, onSuccess, onCancel }) {
@@ -38,11 +37,11 @@ function TEIForm({ program, orgUnit, editTEI, onSuccess, onCancel }) {
   const [enrollmentDate, setEnrollmentDate] = useState(today());
   const [error, setError] = useState('');
 
-  const createTEI  = useCreateTEI();
-  const updateTEI  = useUpdateTEI();
-  const createEnr  = useCreateEnrollment();
-  const isEdit     = !!editTEI;
-  const isLoading  = createTEI.isPending || updateTEI.isPending;
+  const createTEI = useCreateTEI();
+  const updateTEI = useUpdateTEI();
+  const createEnr = useCreateEnrollment();
+  const isEdit = !!editTEI;
+  const isLoading = createTEI.isPending || updateTEI.isPending;
 
   const handleChange = useCallback((id, v) => setVals(p => ({ ...p, [id]: v })), []);
 
@@ -121,12 +120,12 @@ function TEIForm({ program, orgUnit, editTEI, onSuccess, onCancel }) {
 }
 
 // EVENT CAPTURE FOR A STAGE
-function StageEventForm({ program, stage, enrollment, orgUnit, editEvent, onSuccess, onCancel }) {
+function StageEventForm({ program, stage, enrollment, teiId, orgUnit, editEvent, onSuccess, onCancel }) {
   const { session } = useAuth();
   const des = getStageDataElements(stage);
   const initVals = () => editEvent ? Object.fromEntries((editEvent.dataValues || []).map(d => [d.dataElement, d.value])) : {};
   const [vals, setVals] = useState(initVals);
-  const [eventDate, setEventDate] = useState(editEvent?.eventDate?.slice(0,10) || today());
+  const [eventDate, setEventDate] = useState(editEvent?.eventDate?.slice(0, 10) || today());
   const [error, setError] = useState('');
   const createMut = useCreateEvent();
   const updateMut = useUpdateEvent();
@@ -141,10 +140,11 @@ function StageEventForm({ program, stage, enrollment, orgUnit, editEvent, onSucc
       programStage: stage.id,
       enrollment: enrollment.enrollment,
       orgUnit: orgUnit.id,
-      trackedEntityInstance: enrollment.trackedEntityInstance,
+      // teiId comes from the parent tei object
+      trackedEntityInstance: teiId,
       eventDate,
       status: 'COMPLETED',
-      dataValues: Object.entries(vals).filter(([,v]) => v !== '' && v != null).map(([dataElement, value]) => ({ dataElement, value: String(value) })),
+      dataValues: Object.entries(vals).filter(([, v]) => v !== '' && v != null).map(([dataElement, value]) => ({ dataElement, value: String(value) })),
     };
     try {
       if (isEdit) { await updateMut.mutateAsync({ eventId: editEvent.event, payload }); onSuccess('Event updated.'); }
@@ -173,15 +173,15 @@ function StageEventForm({ program, stage, enrollment, orgUnit, editEvent, onSucc
 // TEI DETAIL VIEW
 function TEIDetail({ program, orgUnit, teiId, onBack, perms }) {
   const { data: tei, isLoading } = useTEI(teiId);
-  const [activeStageForm, setActiveStageForm] = useState(null); // { stageId, editEvent }
+  const [activeStageForm, setActiveStageForm] = useState(null);
   const [successMsg, setSuccessMsg] = useState('');
 
   if (isLoading) return <Box sx={{ display: 'flex', justifyContent: 'center', p: 4 }}><CircularProgress /></Box>;
   if (!tei) return <Alert severity="error">Could not load record.</Alert>;
 
   const attributes = getTrackerAttributes(program);
-  const enrollment  = tei.enrollments?.[0];
-  const stages      = program.programStages || [];
+  const enrollment = tei.enrollments?.[0];
+  const stages = program.programStages || [];
 
   function getStageEvents(stageId) {
     return (enrollment?.events || []).filter(e => e.programStage === stageId);
@@ -210,7 +210,7 @@ function TEIDetail({ program, orgUnit, teiId, onBack, perms }) {
         <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', md: '1fr 1fr 1fr' }, gap: 0 }}>
           {attributes.map(attr => {
             const val = (tei.attributes || []).find(a => a.attribute === attr.id)?.value;
-            return <DynamicField key={attr.id} field={attr} value={val} onChange={() => {}} readOnly />;
+            return <DynamicField key={attr.id} field={attr} value={val} onChange={() => { }} readOnly />;
           })}
           <Box sx={{ mb: 2 }}>
             <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 600, textTransform: 'uppercase', letterSpacing: .5, fontSize: 10 }}>
@@ -278,7 +278,9 @@ function TEIDetail({ program, orgUnit, teiId, onBack, perms }) {
               {(isCapturing || editingEvent) ? (
                 <StageEventForm
                   program={program} stage={stage}
-                  enrollment={enrollment} orgUnit={orgUnit}
+                  enrollment={enrollment}
+                  teiId={tei.trackedEntityInstance}
+                  orgUnit={orgUnit}
                   editEvent={editingEvent}
                   onSuccess={(msg) => { setSuccessMsg(msg); setActiveStageForm(null); }}
                   onCancel={() => setActiveStageForm(null)}
@@ -346,7 +348,11 @@ export default function TrackerCapturePage({ program, orgUnit }) {
         return <Chip label={enr?.status || 'N/A'} size="small" color={enr?.status === 'COMPLETED' ? 'success' : enr?.status === 'ACTIVE' ? 'primary' : 'default'} />;
       },
     },
-    { field: 'lastUpdated', headerName: 'Last Updated', width: 130, valueFormatter: ({ value }) => fmtDate(value) },
+    {
+      field: 'lastUpdated', headerName: 'Last Updated', width: 130,
+      valueGetter: ({ row }) => row.lastUpdated || row.created,
+      valueFormatter: ({ value }) => fmtDate(value),
+    },
     {
       field: '_actions', headerName: '', width: 100, sortable: false,
       renderCell: ({ row }) => (
@@ -428,7 +434,7 @@ export default function TrackerCapturePage({ program, orgUnit }) {
         <DialogActions>
           <Button onClick={() => setDeleteTarget(null)}>Cancel</Button>
           <Button color="error" variant="contained" disabled={deleteMutation.isPending} onClick={async () => {
-            try { await deleteMutation.mutateAsync(deleteTarget); setDeleteTarget(null); } catch {}
+            try { await deleteMutation.mutateAsync(deleteTarget); setDeleteTarget(null); } catch { }
           }}>{deleteMutation.isPending ? <CircularProgress size={18} /> : 'Delete'}</Button>
         </DialogActions>
       </Dialog>
