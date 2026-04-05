@@ -54,7 +54,7 @@ src/
 
 ## Setup
 
-### Step 1 — Install Docker Desktop (Windows)
+### Step 1 - Install Docker Desktop (Windows)
 
 Download and install [Docker Desktop for Windows](https://www.docker.com/products/docker-desktop/), then open **PowerShell** or **Windows Terminal** and create a working directory:
 
@@ -65,7 +65,7 @@ cd dhis2-local
 
 ---
 
-### Step 2 — Create configuration files
+### Step 2 - Create configuration files
 
 **Create `dhis.conf`** (DHIS2 database configuration):
 
@@ -111,7 +111,7 @@ volumes:
 
 ---
 
-### Step 3 — Start DHIS2
+### Step 3 - Start DHIS2
 
 ```powershell
 $env:DHIS2_IMAGE="dhis2/core:2.40.4"
@@ -124,7 +124,7 @@ Wait 2–3 minutes for DHIS2 to initialise. Once you see `Server startup in` in 
 
 ---
 
-### Step 4 — Install and run the app
+### Step 4 - Install and run the app
 
 ```powershell
 cd path-dhis2-web
@@ -145,7 +145,7 @@ npm start
 
 ---
 
-### Step 5 — Sign in
+### Step 5 - Sign in
 
 Use your own DHIS2 credentials. The app reads your roles and authorities from `/api/me` and shows or hides features accordingly:
 
@@ -171,3 +171,13 @@ All DHIS2 valueTypes render correctly:
 - `TRUE_ONLY` → Checkbox
 - Option Sets (≤6 options) → Chip multi-select
 - Option Sets (>6 options) → MUI Select dropdown
+
+---
+
+## Building for production
+
+```bash
+npm run build
+```
+
+For production deployment, configure a reverse proxy (nginx/Apache) to forward `/api/*` to your DHIS2 server so the app can communicate without CORS restrictions.
