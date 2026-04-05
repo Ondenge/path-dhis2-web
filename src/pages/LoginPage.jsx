@@ -11,13 +11,15 @@ import { fetchMe } from '../api/dhis2';
 
 const BASE_URL_KEY = 'dhis2_base_url';
 
-// PATH SVG logo mark (the diagonal slash motif from PATH brand)
+// PATH SVG
 function PathLogoMark({ size = 40 }) {
   return (
     <svg width={size} height={size} viewBox="0 0 40 40" fill="none">
       <rect width="40" height="40" rx="6" fill="#E8332A"/>
-      <path d="M11 28L20 12L29 28" stroke="white" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round"/>
-      <path d="M14.5 22H25.5" stroke="white" strokeWidth="3" strokeLinecap="round"/>
+      <path d="M14 28V12" stroke="white" strokeWidth="3.5" strokeLinecap="round"/>
+
+      {/* Top loop of P */}
+      <path d="M14 12H22C25 12 27 14 27 17C27 20 25 22 22 22H14" stroke="white" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round"/>
     </svg>
   );
 }
