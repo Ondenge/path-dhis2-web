@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import {
-  Box, Card, CardContent, TextField, Button, Typography,
-  Alert, InputAdornment, IconButton, CircularProgress, Divider, Link
-} from '@mui/material';
+  Box, TextField, Button, Typography,
+  Alert, InputAdornment, IconButton, CircularProgress, Divider} from '@mui/material';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -99,7 +98,7 @@ export default function LoginPage() {
             <Box component="span" sx={{ fontWeight: 700, color: '#E8332A' }}>Tracker App</Box>
           </Typography>
           <Typography sx={{ color: 'rgba(255,255,255,.6)', fontSize: 14, lineHeight: 1.7 }}>
-            Capture data, manage tracked entities, and submit program events - Powered by DHIS2.
+            Capture data, manage tracked entities, and submit program events.
           </Typography>
         </Box>
 
@@ -119,7 +118,7 @@ export default function LoginPage() {
         </Box>
 
         <Typography sx={{ color: 'rgba(255,255,255,.3)', fontSize: 11 }}>
-          © {new Date().getFullYear()} PATH. All rights reserved.
+          © {new Date().getFullYear()} PATH | All rights reserved | Powered by DHIS2
         </Typography>
       </Box>
 
@@ -141,7 +140,7 @@ export default function LoginPage() {
             Sign in
           </Typography>
           <Typography sx={{ color: '#64748B', fontSize: 14, mb: 3 }}>
-            Use your DHIS2 credentials. Access is governed by your assigned roles.
+            Use your DHIS2 credentials.
           </Typography>
 
           {error && (
@@ -157,7 +156,7 @@ export default function LoginPage() {
               onChange={e => setBaseUrl(e.target.value)}
               size="small" fullWidth required
               placeholder="http://localhost:8080"
-              helperText="Requests are proxied — no CORS errors"
+              helperText="Requests are proxied - no CORS errors"
               sx={{ '& .MuiOutlinedInput-root': { '&.Mui-focused fieldset': { borderColor: '#007B83' } } }}
               InputLabelProps={{ sx: { '&.Mui-focused': { color: '#007B83' } } }}
             />
@@ -196,7 +195,7 @@ export default function LoginPage() {
             >
               {loading
                 ? <CircularProgress size={22} sx={{ color: '#fff' }} />
-                : 'Sign in to DHIS2'
+                : 'Sign in to PATH-DHIS2 Web'
               }
             </Button>
           </Box>
@@ -206,7 +205,7 @@ export default function LoginPage() {
           <Box sx={{ display: 'flex', gap: 1, alignItems: 'flex-start' }}>
             <LockOutlinedIcon sx={{ fontSize: 14, color: '#94A3B8', mt: .3, flexShrink: 0 }} />
             <Typography sx={{ fontSize: 12, color: '#94A3B8', lineHeight: 1.6 }}>
-              Your credentials are sent directly to your DHIS2 instance and are never stored by this application.
+              Your credentials are sent directly to the DHIS2 instance and are never stored by this application.
             </Typography>
           </Box>
         </Box>
