@@ -1,28 +1,30 @@
-# PATH.ORG WEB Capture — DHIS2 Full-Parity Capture App
+# PATH.ORG WEB Capture - DHIS2
 
 A production-grade React app providing full parity with the DHIS2 Capture App, built with Material UI, React Query, and React Router.
 
 ## What's included
 
-| Login screen (styled, MUI) |
-| Auth + /api/me integration |
-| DHIS2 role/authority-based permissions |
-| Event programs (WITHOUT_REGISTRATION) |
-| Tracker programs (WITH_REGISTRATION) |
-| TEI registration + auto-enrollment |
-| TEI list (MUI DataGrid, paginated) |
-| TEI detail view + attribute display |
-| Event capture per program stage |
-| Multi-stage program support |
-| Dynamic field rendering (all valueTypes) |
-| OrgUnit tree (lazy-loading, searchable) |
-| Program-filtered org unit selection |
-| React Query (caching, invalidation) |
-| Proper URL encoding (no Tomcat errors) |
-| CORS proxy (no browser CORS errors) |
-| Edit existing events |
-| Delete TEI / events with confirmation |
-| Permission-gated UI (Add/View/Edit/Delete)
+| Feature | Status |
+|---|---|
+| Login screen (styled, MUI) | Done |
+| Auth + /api/me integration | Done |
+| DHIS2 role/authority-based permissions | Done |
+| Event programs (WITHOUT_REGISTRATION) | Done |
+| Tracker programs (WITH_REGISTRATION) | Done |
+| TEI registration + auto-enrollment | Done |
+| TEI list (MUI DataGrid, paginated) | Done |
+| TEI detail view + attribute display | Done |
+| Event capture per program stage | Done |
+| Multi-stage program support | Done |
+| Dynamic field rendering (all valueTypes) | Done |
+| OrgUnit tree (lazy-loading, searchable) | Done |
+| Program-filtered org unit selection | Done |
+| React Query (caching, invalidation) | Done |
+| Proper URL encoding (no Tomcat errors) | Done |
+| CORS proxy (no browser CORS errors) | Done |
+| Edit existing events | Done |
+| Delete TEI / events with confirmation | Done |
+| Permission-gated UI (Add/View/Edit/Delete) | Done |
 
 ---
 
@@ -139,7 +141,7 @@ $env:REACT_APP_DHIS2_URL="http://localhost:8080"
 npm start
 ```
 
-> All `/api/*` requests are proxied by the React dev server to your DHIS2 instance — no CORS configuration needed. This is handled by `src/setupProxy.js`.
+> All `/api/*` requests are proxied by the React dev server to your DHIS2 instance - no CORS configuration needed. This is handled by `src/setupProxy.js`.
 
 ---
 
