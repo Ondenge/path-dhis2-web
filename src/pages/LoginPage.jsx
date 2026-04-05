@@ -109,7 +109,7 @@ export default function LoginPage() {
             'Event & Tracker program capture',
             'Role-based access control',
             'Org unit hierarchy navigation',
-            'Offline-ready proxy architecture',
+            'CORS proxy architecture',
           ].map(f => (
             <Box key={f} sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1.5 }}>
               <Box sx={{ width: 6, height: 6, borderRadius: '50%', bgcolor: '#E8332A', flexShrink: 0 }} />
