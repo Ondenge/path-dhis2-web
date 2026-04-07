@@ -247,7 +247,7 @@ export default function MainLayout() {
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mr: 2 }}>
               <PathLogoMark size={24} />
               <Typography sx={{ fontWeight: 700, fontSize: 14, color: PATH.navy, fontFamily: 'DM Sans, sans-serif', letterSpacing: -.2 }}>
-                PATH Form
+                PATH
               </Typography>
             </Box>
 
